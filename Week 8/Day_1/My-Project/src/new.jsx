@@ -1,9 +1,13 @@
 import React from 'react'
 
-export default function App() {
+const New = () => {
   return (
     <div>
       <h1>Hello</h1>
+      <p>Some How To Know</p>
     </div>
+    
   )
 }
+
+export default New;
