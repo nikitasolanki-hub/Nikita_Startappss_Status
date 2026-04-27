@@ -1,4 +1,5 @@
 
+
 const express = require('express');
 const app = express();
 const bookRoutes = require('./routes/bookRoutes');
@@ -6,6 +7,8 @@ const bookRoutes = require('./routes/bookRoutes');
 app.use(express.json());       //(comment this perform without express.json() )
 
 app.use('/', bookRoutes); 
+
+
 
 // let books = [
 //     {id: 1, title: 'Book 1', author: 'Author 1'},
