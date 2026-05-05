@@ -1,59 +1,109 @@
-//Main Api
-// Use Async and Await function asynchronouse(to call api)
-// ALso use Promise and (.then) 
-
-const BASE_URl = "https://jsonplaceholder.typicode.com/";
-
-const apiDataDiv = document.getElementB
-
-const mapData = () => {
-    return postData.map((individualEntryOfPost) => {
-        <div>{individualEntryOfPost.title}</div>
-
-    })
-};
-
-apiDataDiv.innerHtml = 
+//Main Api Page 
+//using Axios for fetching api 
+//also use Promise and (.then)
 
 
-    const postData = getPosts()
-//Get Post 
-export async function getPosts() {
+// Base API URL used for all requests
+const BASE_URL = "https://jsonplaceholder.typicode.com";
+
+
+//Fetch all posts from API (Get)
+async function getPosts() {
+    // Send GET request to /posts endpoint
     const res = await fetch(`${BASE_URL}/posts`);
-    return await res.json();              // res response object formate
+    if (!res.ok) {
+        throw new Error(`Failed to load posts: ${res.status}`);
+    }
+    // Convert response to JSON and return
+    return await res.json();
 }
-//Get Single Post 
-export async function getPosts(id) {
+//Fetch single post by ID
+async function getPost(id) {
     const res = await fetch(`${BASE_URL}/posts/${id}`);
+    if (!res.ok) {
+        throw new Error(`Failed to load post ${id}: ${res.status}`);
+    }
     return await res.json();
-} 
-//create post
-export async function createPosts(data) {
-    const res = await fetch(`${BASE_URL}/posts`, {
-        method:"Post",
-        headers:{
-            "Content-type":"application/json"
-        },
-        body:JSON.stringify(data)
-    });
-    return await res.json();
-} 
-//uPDATE pOST
-export async function updatePosts(id, data) {
-    const res = await fetch(`${BASE_URL}/posts/${id}` ,{
-        method:"PUT",
-        headers:{
-            "Content-type":"application/json"
-        },
-        body:JSON.stringify(data)
-    });
-    return await res.json();
-} 
-//Delete Post
-
-export async function deletePosts(id){
- await fetch(`${BASE_URL}/posts/${id}`, {
-    method: "Delete",
- });
- return true;
 }
+
+//Create a new post(Post)
+async function createPost(data) {
+    // Send POST request with JSON body
+    const res = await fetch(`${BASE_URL}/posts`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+        throw new Error(`Failed to create post: ${res.status}`);
+    }
+    return await res.json();
+}
+
+//Update an existing post
+async function updatePost(id, data) {
+    const res = await fetch(`${BASE_URL}/posts/${id}`, {
+        //Send PUT request to update post
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+        throw new Error(`Failed to update post ${id}: ${res.status}`);
+    }
+    return await res.json();
+}
+// Delete a post by ID
+async function deletePost(id) {
+    const res = await fetch(`${BASE_URL}/posts/${id}`, {
+        method: "DELETE"
+    });
+    if (!res.ok) {
+        throw new Error(`Failed to delete post ${id}: ${res.status}`);
+    }
+    return true;
+}
+
+// Escape text for safe HTML rendering
+function escapeHtml(text) {
+    if (typeof text !== 'string') return text;
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// Load posts and render them in UI
+async function loadPosts() {
+    //Get container element
+    const apiDataDiv = document.getElementById("apiData");
+    //If element not found, stop execution
+    if (!apiDataDiv) {
+        console.warn("No #apiData element found in the page.");
+        return;
+    }
+    // Show loading text
+    apiDataDiv.textContent = "Loading...";
+
+    try {
+        const posts = await getPosts();
+        apiDataDiv.innerHTML = posts.slice(0, 6).map(post => {
+            return `
+                <article class="api-post">
+                    <h2>${escapeHtml(post.title)}</h2>
+                    <p>${escapeHtml(post.body)}</p>
+                </article>
+            `;
+        }).join("");
+    } catch (error) {
+        apiDataDiv.innerHTML = `<p class="api-error">Error loading posts: ${escapeHtml(error.message)}</p>`;
+    }
+}
+// Run loadPosts when DOM is fully loaded
+document.addEventListener("DOMContentLoaded", loadPosts);
