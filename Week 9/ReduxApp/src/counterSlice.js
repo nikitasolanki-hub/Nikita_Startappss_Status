@@ -1,3 +1,7 @@
+// Slice combines: state, actions, reducers in one file.
+// Actions Auto Created < Redux Toolkit automatically creates: No manual action types needed.
+
+
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {

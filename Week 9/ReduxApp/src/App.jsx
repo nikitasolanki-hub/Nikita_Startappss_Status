@@ -1,3 +1,21 @@
+//Redux Flow
+// Component
+//    ↓
+// dispatch(action)
+//    ↓
+// Reducer
+//    ↓
+// Store updates
+//    ↓
+// UI re-renders
+
+
+
+
+
+
+
+
 import { useDispatch, useSelector } from "react-redux";
 
 import {

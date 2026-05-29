@@ -1,3 +1,5 @@
+// provider Makes Redux store available globally to all components.
+//UseDispatch Send increment action to reducer
 
 import ReactDOM from "react-dom/client";
 

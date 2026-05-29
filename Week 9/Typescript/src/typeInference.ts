@@ -1,0 +1,1 @@
+let inferredString = "This is a String";
